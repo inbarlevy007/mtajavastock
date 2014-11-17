@@ -1,6 +1,7 @@
 package com.mta.javacourse;
 
 import java.io.IOException;
+
 import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
@@ -19,7 +20,6 @@ public class MTA_InbarServlet extends HttpServlet {
 		int radius = 50;
 		double circleArea = (radius * radius) * Math.PI;
 		String roundCircleArea = String.format("%.2f", circleArea);
-		
 		String line1 = new String ("calculation 1: Area of circle with radius " + radius + " is: " + roundCircleArea + " square-cm.");
 		
 		
@@ -28,19 +28,15 @@ public class MTA_InbarServlet extends HttpServlet {
 		int hypotenuse = 50;
 		
 		double degreeToRadian = Math.toRadians(bAngle);
-		double opposite = hypotenuse * degreeToRadian;
+		double opposite = hypotenuse * Math.sin(degreeToRadian);
 		String roundOpposite = String.format("%.2f", opposite);
-		String line2 = new String ("calculation 2: Length of opposite, where angle B is: " + bAngle + " is: " + roundOpposite + ".");
+		String line2 = new String ("calculation 2: Length of opposite, where angle B is: " + bAngle + " degrees" + " is: " + roundOpposite + ".");
 		
 		//calculate power of 20
 		int base = 20;
 		int exp = 13;
-		long powResult = 1;
-		
-		for (int i = 1; i <= exp; i++)
-			powResult *= base;
-		
-		String line3 = new String ("calculation 3: Power of " + base +" with exp of " + exp + " is: " + powResult);
+		long powRes = (long)Math.pow(base, exp);
+		String line3 = new String ("calculation 3: Power of " + base +" with exp of " + exp + " is: " + powRes);
 		
 		String resultStr = resStr + "<br>" + line1 + "<br>" + line2 + "<br>" + line3;
 		
