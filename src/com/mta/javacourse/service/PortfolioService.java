@@ -7,32 +7,21 @@ import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Stock;
 
 public class PortfolioService {
-
-	Stock st1 = new Stock();
-	Stock st2 = new Stock();
-	Stock st3 = new Stock();
-
+	
+	/**
+	 * Method that insert new stocks values to the portfolio.
+	 * @return the updated portfolio
+	 */
 	public Portfolio getPortfolio ()
 	{
-		Portfolio myPortfolio = new Portfolio();
+		Portfolio myPortfolio = new Portfolio("portfolio");
 		Calendar c = Calendar.getInstance();
 		c.set (2014, 10, 15, 0, 0, 0);
 		Date d = (Date) c.getTime();
 		
-		st1.setSymbol("PIH");
-		st1.setAsk(12.4f);
-		st1.setBid(13.1f);
-		st1.setDate(d);
-
-		st2.setSymbol("AAL");
-		st2.setAsk(5.5f);
-		st2.setBid(5.78f);
-		st2.setDate(d);
-
-		st3.setSymbol("CAAS");
-		st3.setAsk(31.5f);
-		st3.setBid(31.2f);
-		st3.setDate(d);
+		Stock st1 = new Stock("PIH", 12.4f, 13.1f, d);
+		Stock st2 = new Stock("AAL", 5.5f, 5.78f, d);
+		Stock st3 = new Stock("CAAS", 31.5f, 31.2f, d);
 
 		myPortfolio.addStock(st1);
 		myPortfolio.addStock(st2);
