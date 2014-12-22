@@ -97,10 +97,10 @@ public class Portfolio {
 					updateBalance(currentSell);
 					stockStatus[i].setStockQuantity(0);
 				}
-				else if(stockStatus[i].getStockQuantity()-quantity <= 0){
+				else if(stockStatus[i].getStockQuantity()-quantity < 0){
 						System.out.println("Error, not enough stocks to sell");
 				}
-				else if (stockStatus[i].getStockQuantity()-quantity>0){
+				else if (stockStatus[i].getStockQuantity()-quantity >= 0){
 					stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()-quantity);
 					float currentSell1 = quantity*stockStatus[i].getCurrentBid();
 					updateBalance(currentSell1);
@@ -150,10 +150,10 @@ public class Portfolio {
 		for(int i=0; i<stocks.length;i++)
 			if(symbol.equals(stocks[i].getStockSymbol()))
 			{
-				stocks[i] = stocks[portfolioSize];
-				stocks[portfolioSize] =null;
-				stockStatus[i] = stockStatus[portfolioSize];
-				stockStatus[portfolioSize] =null;
+				stocks[i] = stocks[portfolioSize-1];
+				stocks[portfolioSize-1] =null;
+				stockStatus[i] = stockStatus[portfolioSize-1];
+				stockStatus[portfolioSize-1] =null;
 				portfolioSize--;
 				return true;
 			}
