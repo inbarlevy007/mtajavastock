@@ -1,5 +1,8 @@
 package com.mta.javacourse.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
  
 public class Stock {
@@ -8,16 +11,19 @@ public class Stock {
         private String stockSymbol;
         private float ask;
         private float bid;
-        private Date date;
-        
+ 		Calendar basicDate = Calendar.getInstance();
+ 		java.util.Date date = basicDate.getTime(); 
+ 		
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		
         /**
-		 * c'tor that init all of the Stock members.
+		 * c'tor that init the Stock members.
 		 */
+		
 		public Stock(){
 			this.stockSymbol = "";
 			this.ask = 0;
 			this.bid = 0;
-			this.date = new Date();
 		}
 		
 		/**
@@ -27,13 +33,13 @@ public class Stock {
 		 * @param bid
 		 * @param date
 		 */
-		public Stock(String stockSymbol, float ask, float bid, java.util.Date date) {
+		public Stock(String stockSymbol, float ask, float bid, Date date) {
 			this();
 			
 			setStockSymbol(stockSymbol);
 			setAsk(ask);
 			setBid(bid);
-			setDate(date);
+			setDate(new Date(date.getTime()));
 		}
 		
 		/**
@@ -41,7 +47,7 @@ public class Stock {
 		 * @param stock
 		 */
 		public Stock(Stock stock) {
-			this(stock.stockSymbol, stock.ask, stock.bid, stock.date);			
+			this(stock.stockSymbol, stock.ask, stock.bid,  new Date(stock.date.getTime()));			
 		}
        
         //Setters & getters
@@ -78,9 +84,11 @@ public class Stock {
         
         public String getHtmlDescription()
         {
+        	    String dateString = df.format(date.getTime()) ;
                 String stockHtmlDetailsString = "<b>Stock symbol</b>: " +getStockSymbol()
                 		+ "<b> Stock Ask</b>: " +getAsk() + "$ <b> Bid</b>: " +getBid() 
-                		+ "$ <b> Stock Date</b>: " +getDate();
+                		+ "$ <b> Stock Date</b>: " + dateString;
+                
                 return stockHtmlDetailsString;
         }
         

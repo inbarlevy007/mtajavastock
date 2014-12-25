@@ -1,7 +1,7 @@
 package com.mta.javacourse.service;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Stock;
@@ -9,7 +9,7 @@ import com.mta.javacourse.model.Stock;
 public class PortfolioService {
 	
 	/**
-	 * Method that create a new portfolio and insert new stocks values.
+	 * Method that create a new portfolio and insert new stocks values .
 	 * @return the updated portfolio
 	 */
 	public Portfolio getPortfolio ()
@@ -18,9 +18,10 @@ public class PortfolioService {
 		myPortfolio.setTitle("Exercise 7 - Portfolio");
 		myPortfolio.setBalance(10000);
 		
-		Calendar c = Calendar.getInstance();
-		c.set (2014, 10, 15, 0, 0, 0);
-		Date d = (Date) c.getTime();
+		Calendar basicDate = Calendar.getInstance();
+		basicDate.set(Calendar.ERA, GregorianCalendar.AD);
+		basicDate.set(2014,11,15);
+		java.util.Date d = basicDate.getTime();
 		
 		Stock st1 = new Stock("PIH", 10f, 8.5f, d);
 		Stock st2 = new Stock("AAL", 30f, 25.5f, d);

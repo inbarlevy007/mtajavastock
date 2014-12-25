@@ -31,7 +31,7 @@ public class Portfolio {
 		balance = 0;
 		stocks = new Stock[MAX_PORTFOLIO_SIZE];
 		stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE];
-		setTitle("");
+		setTitle("Portfolio Title");
 	}
 	
 	/**
@@ -240,7 +240,7 @@ public class Portfolio {
 	public String getHtmlString()
 	{
 		String str = "<h1><center>" + getTitle() + "</center></h1>" + "<br/>";
-		str +="<b> Total Portfolio Value: </b>" + getTotalValue() +"$ <b>Total Stocks Value: </b>"+ getStocksValue() + "$ <b>Balance: </b>"+ getBalance() +"$ <br/><br/>";
+		str +="<b> Total Portfolio Value: </b>" + getTotalValue() +"$, <b>Total Stocks Value: </b>"+ getStocksValue() + "$, <b>Balance: </b>"+ getBalance() +"$. <br/><br/>";
 		
 		int i = 0;
 		
@@ -271,7 +271,6 @@ public class Portfolio {
 			symbol = "None";
 			currentAsk = 0;
 			currentBid = 0;
-			date = new Date();
 			recommendation = ALGO_RECOMMENDATION.DO_NOTHING;
 			stockQuantity = 0;
 		}
@@ -286,7 +285,7 @@ public class Portfolio {
 			setSymbol(stockStatus.symbol);
 			setCurrentAsk(stockStatus.currentAsk);
 			setCurrentBid(stockStatus.currentBid);
-			setDate(stockStatus.date);
+			this.date = new Date(stockStatus.date.getTime());
 			setRecommendation(stockStatus.recommendation);
 			setStockQuantity(stockStatus.stockQuantity);
 		}
@@ -301,7 +300,7 @@ public class Portfolio {
 			setSymbol(stock.getStockSymbol());
 			setCurrentBid(stock.getBid());
 			setCurrentAsk(stock.getAsk());
-			setDate(stock.getDate());
+			setDate(new Date(stock.date.getTime()));
 			setRecommendation(ALGO_RECOMMENDATION.DO_NOTHING);
 			setStockQuantity(0);
 		}
