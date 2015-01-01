@@ -6,12 +6,12 @@ import com.mta.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
 
 
 public class StockStatus extends Stock {
-	
+
 	private ALGO_RECOMMENDATION recommendation;
 	private int stockQuantity;
-	
+
 	/**
-	 * c'tor that init stockStatus members.
+	 * c'tor that init stockStatus & the inherit members .
 	 */
 	public StockStatus() {
 		stockSymbol = "None";
@@ -20,7 +20,7 @@ public class StockStatus extends Stock {
 		recommendation = ALGO_RECOMMENDATION.DO_NOTHING;
 		stockQuantity = 0;
 	}
-	
+
 	/**
 	 * copy c'tor that copies the instance "stockStatus".
 	 * @param stockStatus
@@ -35,7 +35,27 @@ public class StockStatus extends Stock {
 		setRecommendation(stockStatus.recommendation);
 		setStockQuantity(stockStatus.stockQuantity);
 	}
-
+	/**
+	 * copy c'tor
+	 * @param stockSymbol
+	 * @param ask
+	 * @param bid
+	 * @param date
+	 */
+	
+	public StockStatus(String stockSymbol, float ask, float bid, Date date) {
+		this();
+		
+		setStockSymbol(stockSymbol);
+		setAsk(ask);
+		setBid(bid);
+		setDate(new Date(date.getTime()));
+	}
+	
+	/**
+	 * getters & setters
+	 * @return
+	 */
 	public ALGO_RECOMMENDATION getRecommendation() {
 		return recommendation;
 	}

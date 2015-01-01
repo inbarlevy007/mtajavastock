@@ -1,31 +1,29 @@
 package com.mta.javacourse.model;
 
 import java.util.Date;
+
 /**
- * This is a class of portfolio.
- * Every portfolio can hold stocks.
- * Every stock has stock status that is private to the portfolio holder.
- * @author karin
+ * 
+ * @author Inbar Levy
  *
  */
 public class Portfolio {
-	
+
 	public static final int MAX_PORTFOLIO_SIZE = 5;
 	public static final int SELL_ALL = -1;
 	public static final int BUY_ALL = -1;
-	
+
 	private int portfolioSize;
 	private StockStatus[] stockStatus;
 	private String title;
 	private float balance;
-	
+
 	public enum ALGO_RECOMMENDATION {
 		DO_NOTHING, BUY, SELL;		
 	}
-	
+
 	/**
-	 *c'tor definition of portfolio.
-	 *creates new portfolio and initializes it's members.
+	 * c'tor that init all of the portfolio members.
 	 */
 	public Portfolio()
 	{
@@ -36,8 +34,7 @@ public class Portfolio {
 	}
 
 	/**
-	 * c'tor second definition - receives a title.
-	 * calls the first c'tor and adds a title.
+	 * c'tor that sets & receives a title.
 	 * @param title
 	 */
 	public Portfolio(String title)
@@ -45,43 +42,28 @@ public class Portfolio {
 		this();
 		this.setTitle(title);
 	}
-	
+
 	/**
-	 * copy constructor.
-	 * Receives an instance of portfolio and copies it.
+	 * copy c'tor that copies the instance "portfolio".
 	 * @param portfolio
 	 */
+
 	public Portfolio(Portfolio portfolio)
 	{
 		this(portfolio.getTitle());
 		setPortfolioSize(portfolio.getPortfolioSize());
-		
+
 		for(int i = 0; i < portfolioSize; i++)
 		{
 			stockStatus[i] = new StockStatus(portfolio.getStockStatus()[i]);
 		}
-		updateBalance(portfolio.getBalance());
+
 	}
 
-	//Getters & Setters:
-	public String getTitle(){
-		return title;
-	}
-	
-	public void setTitle(String title){
-		this.title = title;
-	}
-	
-	public int getPortfolioSize() {
-		return portfolioSize;
-	}
-
-	public void setPortfolioSize(int portfolioSize) {
-		this.portfolioSize = portfolioSize;
-	}
-	
 	/**
-	 * This method adds a new stock to the portfolio.
+	 * Method that adds a new stockStatus to the portfolio.
+	 * Print Error the user adds stocks more than MAX_PORTFOLIO_SIZE.
+	 * * Print Error the user adds stock that's already exists.
 	 * @param stock
 	 */
 	public void addStock(Stock stock)
@@ -90,10 +72,10 @@ public class Portfolio {
 		{
 			if(this.stockStatus[i].getStockSymbol().equals(stock.getStockSymbol()))
 			{
-				return;
+				System.out.println("This stock is already exists");
 			}
 		}
-		
+
 		if(portfolioSize < MAX_PORTFOLIO_SIZE)
 		{
 			this.stockStatus[portfolioSize] = new StockStatus();
@@ -108,28 +90,13 @@ public class Portfolio {
 			System.out.println("Can't add new stock, portfolio can have only " + MAX_PORTFOLIO_SIZE + " stocks");
 		}
 	}
+
 	/**
-	 * Method that receives a certain stock symbol and removes the right stock from portfolio.
-	 * portfolioSize will change as well.
-	 * @param stock
+	 * Method that sells stock and update the balance accordingly.
+	 * @param symbol
+	 * @param quantity
+	 * @return
 	 */
-	
-	public  boolean removeStock(String symbol)
-	{
-		sellStock(symbol,-1);
-		for(int i=0; i<stockStatus.length;i++)
-			if(symbol.equals(stockStatus[i].getStockSymbol()))
-			{
-				stockStatus[i] = stockStatus[portfolioSize-1];
-				stockStatus[portfolioSize-1] =null;
-				stockStatus[i] = stockStatus[portfolioSize-1];
-				stockStatus[portfolioSize-1] =null;
-				portfolioSize--;
-				return true;
-			}
-		return false;
-	}
-	
 	public boolean sellStock(String symbol, int quantity )
 	{
 
@@ -142,7 +109,7 @@ public class Portfolio {
 					stockStatus[i].setStockQuantity(0);
 				}
 				else if(stockStatus[i].getStockQuantity()-quantity < 0){
-						System.out.println("Error, not enough stocks to sell");
+					System.out.println("Error, not enough stocks to sell");
 				}
 				else if (stockStatus[i].getStockQuantity()-quantity >= 0){
 					stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()-quantity);
@@ -153,7 +120,7 @@ public class Portfolio {
 			}
 		return false;
 	}
-		
+
 	/**
 	 * Method that buys stock and update the balance accordingly.
 	 * @param symbol
@@ -181,9 +148,30 @@ public class Portfolio {
 			}
 		return false;
 	}
-	
+
 	/**
-	 * The get stocks value methods return the value of all the stocks in this portfolio.
+	 * Method that receives a certain stock symbol and removes the right stock from portfolio.
+	 * portfolioSize will change as well.
+	 * @param stock
+	 */
+	public  boolean removeStock(String symbol)
+	{
+		sellStock(symbol,-1);
+		for(int i=0; i<stockStatus.length;i++)
+			if(symbol.equals(stockStatus[i].getStockSymbol()))
+			{
+				stockStatus[i] = stockStatus[portfolioSize-1];
+				stockStatus[portfolioSize-1] =null;
+				stockStatus[i] = stockStatus[portfolioSize-1];
+				stockStatus[portfolioSize-1] =null;
+				portfolioSize--;
+				return true;
+			}
+		return false;
+	}
+
+	/**
+	 * Method that sums the stocks value according to the current bid.
 	 * @return
 	 */
 	public float getStocksValue()
@@ -195,47 +183,70 @@ public class Portfolio {
 		}
 		return sum;
 	}
-	
-	public float getBalance(){
-		return balance;
-	}
-	
+
+
 	/**
-	 * This method returns the value of the portfolio = balance + value of the stocks.
+	 * Method that sums all the portfolio value.
 	 * @return
 	 */
+
 	public float getTotalValue()
 	{
 		return getStocksValue() + getBalance();
 	}
-	
-	public StockStatus[] getStockStatus() {
-		return stockStatus;
-	}
-	
+
 	/**
-	 * A method that updates the balance of the stock.
+	 * Method that adds to balance when the user sells/buys stocks.
 	 * @param amount
 	 */
 	public void updateBalance(float amount){
 		if (balance + amount < 0){
-			System.out.println("Error - Not enough balance to complete purchase!");
+			System.out.println("Error, there is not enough balance to spend.");
 		}
 		else
 		{
 			balance += amount;
-			System.out.println("The amount was added/reduced successfully.");
 		}
 	}
-	
-	/**
-	 * this method return an html string that includes the title of the portfolio
-	 * and the description of it's stocks.
-	 * @return
-	 */
+
+	//Getters & Setters:
+	public float getBalance() {
+		return balance;
+	}
+
+	public void setBalance(float balance) {
+		this.balance = balance;
+	}
+
+	public StockStatus[] getStockStatus() {
+		return stockStatus;
+	}
+
+	public void setStockStatus(StockStatus[] stockStatus) {
+		this.stockStatus = stockStatus;
+	}
+
+	public String getTitle(){
+		return title;
+	}
+
+	public void setTitle(String title){
+		this.title = title;
+	}
+
+	public int getPortfolioSize() {
+		return portfolioSize;
+	}
+
+	public void setPortfolioSize(int portfolioSize) {
+		this.portfolioSize = portfolioSize;
+	}
+
+	//Create an html string with the stock's members and their title
+
 	public String getHtmlString()
 	{
-		String str = "<h1><font color=turquoise>" + getTitle() + "</font></h1>" + "<br/>";
+		String str = "<h1><font color=pink>" + getTitle() + "</font></h1>" + "<br/>";
 		str += "<b>Total Portfolio Value:</b> " + getTotalValue() +
 				"$, <b>Total Stocks Value:</b> " + getStocksValue() +
 				"$, <b>Balance:</b> " + getBalance() + "$<br/>";
