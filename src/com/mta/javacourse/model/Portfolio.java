@@ -246,7 +246,7 @@ public class Portfolio {
 
 	public String getHtmlString()
 	{
-		String str = "<h1><font color=pink>" + getTitle() + "</font></h1>" + "<br/>";
+		String str = "<font color=pink>" + "<h1><center>" +getTitle() + "</center></h1>" + "</font></h1>" + "<br/> ";
 		str += "<b>Total Portfolio Value:</b> " + getTotalValue() +
 				"$, <b>Total Stocks Value:</b> " + getStocksValue() +
 				"$, <b>Balance:</b> " + getBalance() + "$<br/>";
