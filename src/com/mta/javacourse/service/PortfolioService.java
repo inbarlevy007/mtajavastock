@@ -3,6 +3,10 @@ package com.mta.javacourse.service;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.mta.javacourse.exception.BalanceException;
+import com.mta.javacourse.exception.PortfolioFullException;
+import com.mta.javacourse.exception.StockAlreadyExistsException;
+import com.mta.javacourse.exception.StockNotExistException;
 import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Stock;
 import com.mta.javacourse.model.StockStatus;
@@ -12,11 +16,15 @@ public class PortfolioService {
 	/**
 	 * Method that create a new portfolio and insert new stocks values .
 	 * @return the updated portfolio
+	 * @throws PortfolioFullException 
+	 * @throws StockAlreadyExistsException 
+	 * @throws BalanceException 
+	 * @throws StockNotExistException 
 	 */
-	public Portfolio getPortfolio ()
+	public Portfolio getPortfolio () throws StockAlreadyExistsException, PortfolioFullException, StockNotExistException, BalanceException
 	{
 		Portfolio myPortfolio = new Portfolio("portfolio");
-		myPortfolio.setTitle("Exercise 8 - Portfolio");
+		myPortfolio.setTitle("Exercise 9 - Portfolio");
 		myPortfolio.updateBalance(10000);
 		
 		Calendar basicDate = Calendar.getInstance();
@@ -30,6 +38,7 @@ public class PortfolioService {
 
 		myPortfolio.addStock(st1);
 		myPortfolio.addStock(st2);
+		myPortfolio.addStock(st3);
 		myPortfolio.addStock(st3);
 		
 		myPortfolio.buyStock("PIH", 20);
