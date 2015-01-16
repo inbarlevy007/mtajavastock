@@ -57,12 +57,12 @@ public class Portfolio {
 	{
 		this(portfolio.getTitle());
 		setPortfolioSize(portfolio.getPortfolioSize());
+		this.setBalance(portfolio.getBalance());
 
 		for(int i = 0; i < portfolioSize; i++)
 		{
 			stockStatus[i] = new StockStatus(portfolio.getStockStatus()[i]);
 		}
-
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class Portfolio {
 		{
 			if(this.stockStatus[i].getStockSymbol().equals(stock.getStockSymbol()))
 			{
-				throw new StockAlreadyExistsException();
+				throw new StockAlreadyExistsException(stock.getStockSymbol());
 			}
 		}
 
@@ -94,7 +94,7 @@ public class Portfolio {
 		}
 		else
 		{
-			throw new PortfolioFullException();
+			throw new PortfolioFullException(MAX_PORTFOLIO_SIZE);
 		}
 	}
 
@@ -107,7 +107,6 @@ public class Portfolio {
 	 */
 	public void sellStock(String symbol, int quantity ) throws StockNotExistException
 	{
-
 		for(int i=0; i<portfolioSize; i++)
 			if(this.stockStatus[i].getStockSymbol().equals(symbol))
 			{
@@ -126,7 +125,7 @@ public class Portfolio {
 				}
 				return;
 			}
-		throw new StockNotExistException();
+		throw new StockNotExistException(symbol);
 	}
 
 	/**
@@ -139,7 +138,6 @@ public class Portfolio {
 	 */
 	public void buyStock(String symbol, int quantity ) throws StockNotExistException, BalanceException
 	{
-		
 		for(int i=0; i<stockStatus.length;i++)
 			if(symbol.equals(stockStatus[i].getStockSymbol()))
 			{
@@ -150,17 +148,16 @@ public class Portfolio {
 					float currentBuy = (maxQuantityToBuy *stockStatus[i].getAsk())/(-1);
 					updateBalance(currentBuy);
 					return;
-
 				}
 				else if(maxQuantityToBuy < quantity){
-					throw new BalanceException();
+					throw new BalanceException(getBalance());
 				}
 				stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()+quantity);
 				float currentBuy1=(quantity*stockStatus[i].getAsk())/(-1);
 				updateBalance(currentBuy1);
 				return;
 			}
-		throw new StockNotExistException();
+		throw new StockNotExistException(symbol);
 	}
 
 	/**
@@ -182,7 +179,7 @@ public class Portfolio {
 				portfolioSize--;
 				return;
 			}
-		throw new StockNotExistException();
+		throw new StockNotExistException(symbol);
 	}
 
 	/**

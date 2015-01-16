@@ -2,10 +2,9 @@ package com.mta.javacourse.exception;
 
 public class StockAlreadyExistsException extends Exception {
 	
-	public StockAlreadyExistsException() {
+	public StockAlreadyExistsException(String stockSymbol) {
 		
-		super("Cannot add the new stock, the stock is already exists.");
-		
+		super("Cannot add the new stock, the stock "+ stockSymbol + " already exists.");
 	}
 
 }

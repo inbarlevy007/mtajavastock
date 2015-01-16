@@ -14,7 +14,7 @@ import com.mta.javacourse.model.StockStatus;
 public class PortfolioService {
 	
 	/**
-	 * Method that create a new portfolio and insert new stocks values .
+	 * Method that create a new portfolio and insert new stocks values.
 	 * @return the updated portfolio
 	 * @throws PortfolioFullException 
 	 * @throws StockAlreadyExistsException 
@@ -48,7 +48,6 @@ public class PortfolioService {
 		myPortfolio.sellStock("AAL", -1);	
 		
 		myPortfolio.removeStock("CAAS");
-		
 		
 		return myPortfolio;
 	}

@@ -51,8 +51,7 @@ public class Stock {
 		}
        
         //Setters & getters
-		
-       
+	
         public String getStockSymbol() {
                 return stockSymbol;
         }
@@ -91,5 +90,4 @@ public class Stock {
                 
                 return stockHtmlDetailsString;
         }
-        
 }

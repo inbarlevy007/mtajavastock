@@ -20,6 +20,9 @@ public class PortfolioServlet extends HttpServlet {
 
 		PortfolioService portfolioService = new PortfolioService();
 		Portfolio portfolio;
+		/**
+		 * Multi try/catch for taking care of exceptions.
+		 */
 		try {
 			portfolio = portfolioService.getPortfolio();
 			String portfolioString= portfolio.getHtmlString();
