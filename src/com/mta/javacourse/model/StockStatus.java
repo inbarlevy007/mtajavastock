@@ -20,6 +20,12 @@ public class StockStatus extends Stock {
 		recommendation = ALGO_RECOMMENDATION.DO_NOTHING;
 		stockQuantity = 0;
 	}
+	public StockStatus(Stock stock){
+		super(stock);
+		this.recommendation = ALGO_RECOMMENDATION.DO_NOTHING;
+		this.stockQuantity = 0;
+	}
+
 
 	/**
 	 * copy c'tor that copies the instance "stockStatus".

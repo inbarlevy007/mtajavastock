@@ -1,13 +1,15 @@
 package com.mta.javacourse.exception;
-/**
- * Exception for having not enough balance
- * @author Inbar Levy
- *
- */
-public class BalanceException extends Exception{
+
+public class BalanceException extends Exception {
+
+	private static final long serialVersionUID = 1L;
 	
-	public BalanceException(float currBalance)
-	{
-		super("Your " + currBalance + " is not enough to make this purchase.");
+	public BalanceException() {
+		super("Out of balance!");
 	}
+	
+	public BalanceException(String message) {
+		super(message);
+	}
+
 }

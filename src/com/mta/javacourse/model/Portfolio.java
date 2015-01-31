@@ -1,11 +1,9 @@
 package com.mta.javacourse.model;
 
 import java.util.Date;
+import java.util.List;
 
-import com.mta.javacourse.exception.BalanceException;
-import com.mta.javacourse.exception.PortfolioFullException;
-import com.mta.javacourse.exception.StockAlreadyExistsException;
-import com.mta.javacourse.exception.StockNotExistException;
+import com.mta.javacourse.exception.*;
 
 /**
  * 
@@ -36,6 +34,10 @@ public class Portfolio {
 		stockStatus = new StockStatus[MAX_PORTFOLIO_SIZE];
 		balance = 0;
 		this.setTitle("New Portfolio");
+	}
+	public Portfolio(List<StockStatus> stockStatuses) {
+		for (int i = 0; i < portfolioSize; i++)
+			this.stockStatus[i] = stockStatuses.get(i);
 	}
 
 	/**
@@ -94,7 +96,7 @@ public class Portfolio {
 		}
 		else
 		{
-			throw new PortfolioFullException(MAX_PORTFOLIO_SIZE);
+			throw new PortfolioFullException();
 		}
 	}
 
@@ -105,7 +107,7 @@ public class Portfolio {
 	 * @return
 	 * @throws StockNotExistException 
 	 */
-	public void sellStock(String symbol, int quantity ) throws StockNotExistException
+	public void sellStock(String symbol, int quantity ) throws StockNotExistsException
 	{
 		for(int i=0; i<portfolioSize; i++)
 			if(this.stockStatus[i].getStockSymbol().equals(symbol))
@@ -125,7 +127,7 @@ public class Portfolio {
 				}
 				return;
 			}
-		throw new StockNotExistException(symbol);
+		throw new StockNotExistsException(symbol);
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class Portfolio {
 	 * @throws StockNotExistException 
 	 * @throws BalanceException 
 	 */
-	public void buyStock(String symbol, int quantity ) throws StockNotExistException, BalanceException
+	public void buyStock(String symbol, int quantity ) throws  StockNotExistsException, BalanceException
 	{
 		for(int i=0; i<stockStatus.length;i++)
 			if(symbol.equals(stockStatus[i].getStockSymbol()))
@@ -150,14 +152,14 @@ public class Portfolio {
 					return;
 				}
 				else if(maxQuantityToBuy < quantity){
-					throw new BalanceException(getBalance());
+					throw new BalanceException();
 				}
 				stockStatus[i].setStockQuantity(stockStatus[i].getStockQuantity()+quantity);
 				float currentBuy1=(quantity*stockStatus[i].getAsk())/(-1);
 				updateBalance(currentBuy1);
 				return;
 			}
-		throw new StockNotExistException(symbol);
+		throw new  StockNotExistsException(symbol);
 	}
 
 	/**
@@ -166,7 +168,7 @@ public class Portfolio {
 	 * @param stock
 	 * @throws StockNotExistException 
 	 */
-	public  void removeStock(String symbol) throws StockNotExistException
+	public  void removeStock(String symbol) throws  StockNotExistsException
 	{
 		sellStock(symbol,-1);
 		for(int i=0; i<stockStatus.length;i++)
@@ -179,7 +181,7 @@ public class Portfolio {
 				portfolioSize--;
 				return;
 			}
-		throw new StockNotExistException(symbol);
+		throw new  StockNotExistsException(symbol);
 	}
 
 	/**
@@ -194,6 +196,18 @@ public class Portfolio {
 			sum += stockStatus[i].getStockQuantity() * stockStatus[i].getBid();
 		}
 		return sum;
+	}
+	
+	public StockStatus findBySymbol(String symbol)
+			throws StockNotExistsException {
+		for (int i = 0; i < portfolioSize; i++) {
+			if (this.stockStatus[i] != null) {
+				if (this.stockStatus[i].getStockSymbol().toLowerCase()
+						.equals(symbol))
+					return this.stockStatus[i];
+			}
+		}
+		throw new StockNotExistsException(symbol);
 	}
 
 
@@ -232,6 +246,9 @@ public class Portfolio {
 
 	public StockStatus[] getStockStatus() {
 		return stockStatus;
+	}
+	public StockStatus[] getStocks() {
+		return this.stockStatus;
 	}
 
 	public void setStockStatus(StockStatus[] stockStatus) {
