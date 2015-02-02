@@ -225,9 +225,18 @@ public class DatastoreService {
 
 
 	public void updatePortfolio(Portfolio portfolio) {
-		updateEntity(portfolioToEntity(portfolio));
-		updateStocks(Lists.newArrayList(portfolio.getStocks()));
-	}
+        updateEntity(portfolioToEntity(portfolio));
+        
+        StockStatus[] stockStatus = portfolio.getStockStatus();
+        List<StockStatus> stockStatues = new ArrayList<StockStatus>();
+        for (StockStatus ss : stockStatus) {
+            if(ss != null)
+                stockStatues.add(ss);
+        }
+        
+        updateStocks(stockStatues);
+    }
+
 
 	private void updateEntity(Entity entity) {
 		com.google.appengine.api.datastore.DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

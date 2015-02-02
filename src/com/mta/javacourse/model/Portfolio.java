@@ -36,9 +36,10 @@ public class Portfolio {
 		this.setTitle("New Portfolio");
 	}
 	public Portfolio(List<StockStatus> stockStatuses) {
-		for (int i = 0; i < portfolioSize; i++)
-			this.stockStatus[i] = stockStatuses.get(i);
-	}
+        for (int i = 0; i < stockStatuses.size() ; i++)
+            this.stockStatus[i] = stockStatuses.get(i);
+    }
+
 
 	/**
 	 * c'tor that sets & receives a title.
