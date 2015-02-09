@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 /**
  * @author hanan.gitliz@gmail.com
  */
@@ -61,7 +60,7 @@ public class PortfolioService {
 		StockStatus[] stocks = getPortfolio().getStocks();
 		List<String> symbols = new ArrayList<>(Portfolio.MAX_PORTFOLIO_SIZE);
 		for (StockStatus stockStatus : stocks) {
-			symbols.add(stockStatus.getStockSymbol());
+			symbols.add(stockStatus.getSymbol());
 		}
 		
 		List<StockStatus> update = new ArrayList<>(Portfolio.MAX_PORTFOLIO_SIZE);
@@ -92,7 +91,7 @@ public class PortfolioService {
 			Stock stock = stocks[i];
 			
 			if(stock != null) {
-				List<StockStatus> history = datastoreService.getStockHistory(stock.getStockSymbol(), DAYS_BACK);
+				List<StockStatus> history = datastoreService.getStockHistory(stock.getSymbol(), DAYS_BACK);
 				
 				for (int j = 0; j < history.size(); j++) {
 					StockStatus curr = history.get(j);
@@ -161,17 +160,17 @@ public class PortfolioService {
 		}
 	}
 	
-	public void buyStock(String symbol, int quantity) throws BalanceException, StockNotExistsException {
+	public void buyStock(String symbol, int quantity) throws BalanceException, StockNotExistsException, IllegalQuantityException {
 		getPortfolio().buyStock(symbol, quantity);
 		flush();
 	}
 
-	public void sellStock(String symbol, int quantity) throws StockNotExistsException, IllegalQuantityException {
+	public void sellStock(String symbol, int quantity) throws StockNotExistsException, IllegalQuantityException, BalanceException {
 		getPortfolio().sellStock(symbol, quantity);
 		flush();
 	}
 
-	public void removeStock(String symbol) throws StockNotExistsException, IllegalQuantityException {
+	public void removeStock(String symbol) throws StockNotExistsException, IllegalQuantityException, BalanceException {
 		getPortfolio().removeStock(symbol);
 		flush();
 	}

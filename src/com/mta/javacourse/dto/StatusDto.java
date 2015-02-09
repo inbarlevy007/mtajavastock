@@ -3,6 +3,7 @@ package com.mta.javacourse.dto;
 import java.util.Date;
 
 
+
 /**
  * @author hanan.gitliz@gmail.com
  * @since Jan 11, 2015

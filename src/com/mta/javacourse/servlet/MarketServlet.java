@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 /**
  * @author hanan.gitliz@gmail.com
  * @since Jan 12, 2015
@@ -35,7 +36,6 @@ public class MarketServlet extends AbstractAlgoServlet {
 	
 	/*@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
 		try {
 			resp.setContentType("application/json");
 			String symbol = req.getParameter("symbol");

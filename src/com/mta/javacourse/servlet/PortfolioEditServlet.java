@@ -40,7 +40,6 @@ public class PortfolioEditServlet extends AbstractAlgoServlet {
 		ret.setTitle(portfolio.getTitle());
 		ret.setBalance(portfolio.getBalance());
 		ret.setStockStatusList(stockStatusList);
-
 		resp.getWriter().print(withNullObjects().toJson(ret));
 	}
 

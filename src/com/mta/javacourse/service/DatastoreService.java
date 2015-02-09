@@ -29,6 +29,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.labs.repackaged.com.google.common.collect.Lists;
 
+
 /**
  * Handles all data persistence aspects.
  *
@@ -129,33 +130,24 @@ public class DatastoreService {
 	 * @param array - new selected symbols list.
 	 */
 	/*public void updateStockList(List<String> toPersist) {
-
 		com.google.appengine.api.datastore.DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
 		//delete persisted symbols
 		Query q = new Query(NAMESPACE_STOCK_SYMBOL);
-
 		// Use PreparedQuery interface to retrieve results
 		PreparedQuery pq = datastore.prepare(q);
-
 		List<Key> keys = new ArrayList<Key>();
 		for (Entity result : pq.asIterable()) {
 			keys.add(result.getKey());
 		}
-
 		datastore.delete(keys);
-
 		//convert java list to google API entities.
 		List<Entity> store = new LinkedList<Entity>();
 		for (String s : toPersist) {
 			Key key = KeyFactory.createKey(NAMESPACE_STOCK_SYMBOL, s);
-
 			Entity entity = new Entity(key);
 			entity.setProperty("id", s);
-
 			store.add(entity);
 		}
-
 		//make store
 		datastore.put(store);
 	}*/
@@ -177,6 +169,27 @@ public class DatastoreService {
 
 		return ret;
 	}
+
+	/*public Account loadAccount() {
+		Account account = new Account();
+		com.google.appengine.api.datastore.DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Key key = KeyFactory.createKey(NAMESPACE_ACCOUNT, 1);
+		try {
+			Entity entity = datastore.get(key);
+			account.setUsername((String)entity.getProperty(USERNAME));
+			account.setPassword((String)entity.getProperty(PASSWORD));
+			Double balance = (Double)entity.getProperty(BALANCE);
+			account.setBalance(balance.floatValue());
+		} catch (EntityNotFoundException e) {
+			//no account details found - create a new object and store it to db.
+			account.setUsername("");
+			account.setPassword("");
+			account.setBalance(Account.DEFAULT_BALANCE);
+			Entity entity = accountToEntity(account);
+			datastore.put(entity);
+		}
+		return account;
+	}*/
 
 	public Portfolio loadPortfolilo() {
 		Portfolio portfolio;
@@ -201,7 +214,12 @@ public class DatastoreService {
 			}
 			
 			portfolio.setTitle((String)entity.getProperty(TITLE));
-
+			try {
+				portfolio.updateBalance(((Double)entity.getProperty(PORTFOLIO_BALANCE)).floatValue());
+			} 
+			catch (BalanceException e) {
+				//won't never happen
+			}
 
 		} catch (EntityNotFoundException e) {
 			//no account details found - create a new object and store it to db.
@@ -222,21 +240,20 @@ public class DatastoreService {
 	 * </ul>
 	 * @param updated
 	 */
-
+/*	public void updateAccount(Account updated) {
+		updateEntity(accountToEntity(updated));
+	}*/
 
 	public void updatePortfolio(Portfolio portfolio) {
-        updateEntity(portfolioToEntity(portfolio));
-        
-        StockStatus[] stockStatus = portfolio.getStockStatus();
-        List<StockStatus> stockStatues = new ArrayList<StockStatus>();
-        for (StockStatus ss : stockStatus) {
-            if(ss != null)
-                stockStatues.add(ss);
-        }
-        
-        updateStocks(stockStatues);
-    }
-
+		updateEntity(portfolioToEntity(portfolio));
+		StockStatus [] ss = portfolio.getStocks();
+		ArrayList<StockStatus> arr = new ArrayList<StockStatus>();
+		for(StockStatus s : ss) {
+			if(s != null) arr.add(s);
+		}
+		
+		updateStocks(arr);
+	}
 
 	private void updateEntity(Entity entity) {
 		com.google.appengine.api.datastore.DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -245,7 +262,7 @@ public class DatastoreService {
 
 	private StockStatus fromStockEntry(Entity stockEntity) {
 		StockStatus ret = new StockStatus();
-		ret.setStockSymbol((String) stockEntity.getProperty(SYMBOL));
+		ret.setSymbol((String) stockEntity.getProperty(SYMBOL));
 		ret.setAsk(((Double) stockEntity.getProperty(ASK)).floatValue());
 		ret.setBid(((Double) stockEntity.getProperty(BID)).floatValue());
 		ret.setDate((Date) stockEntity.getProperty(DAY));
@@ -258,10 +275,10 @@ public class DatastoreService {
 	
 	private Entity stockToEntity(StockStatus stock) {
 		Key parent = KeyFactory.createKey("date", stock.getDate().getTime());
-		Key key = KeyFactory.createKey(parent, NAMESPACE_STOCK, stock.getStockSymbol());
+		Key key = KeyFactory.createKey(parent, NAMESPACE_STOCK, stock.getSymbol());
 
 		Entity entity = new Entity(key);
-		entity.setProperty(SYMBOL, stock.getStockSymbol());
+		entity.setProperty(SYMBOL, stock.getSymbol());
 		entity.setProperty(ASK, stock.getAsk());
 		entity.setProperty(BID, stock.getBid());
 		entity.setProperty(DAY, stock.getDate());
@@ -270,8 +287,6 @@ public class DatastoreService {
 		
 		return entity;
 	}
-
-
 
 	private Entity portfolioToEntity(Portfolio portfolio) {
 		Entity entity = new Entity(NAMESPACE_PORTFOLIO, 1);
@@ -284,7 +299,7 @@ public class DatastoreService {
 
 			Stock stock = stocks[i];
 			if(stock != null)
-				symbols.add(stock.getStockSymbol());
+				symbols.add(stock.getSymbol());
 		}
 
 		entity.setProperty(SYMBOL_LIST, symbols);		
@@ -315,7 +330,7 @@ public class DatastoreService {
 
 		com.google.appengine.api.datastore.DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		Filter fSymbol = new FilterPredicate(SYMBOL, FilterOperator.EQUAL, stockStatus.getStockSymbol());
+		Filter fSymbol = new FilterPredicate(SYMBOL, FilterOperator.EQUAL, stockStatus.getSymbol());
 		final long oneDay = TimeUnit.DAYS.toMillis(1);
 		final long daysAgo = System.currentTimeMillis() - oneDay*30;
 		Filter fdays = new FilterPredicate(DAY, FilterOperator.GREATER_THAN_OR_EQUAL, daysAgo);

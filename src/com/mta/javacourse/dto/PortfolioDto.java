@@ -4,6 +4,7 @@ import com.mta.javacourse.model.StockStatus;
 
 import java.util.List;
 
+
 /**
  * @author hanan.gitliz@gmail.com
  * @since Jan 12, 2015

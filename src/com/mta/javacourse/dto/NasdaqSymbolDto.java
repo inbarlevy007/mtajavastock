@@ -2,10 +2,10 @@ package com.mta.javacourse.dto;
 
 
 /**
- *
- * @author hanan.gitliz@gmail.com
- * @since Jan 12, 2015
- */
+*
+* @author hanan.gitliz@gmail.com
+* @since Jan 12, 2015
+*/
 public class NasdaqSymbolDto {
 	
 	private final String symbol;
